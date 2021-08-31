@@ -6,8 +6,7 @@ create table role (
 create table person (
     id bigserial primary key,
     login varchar(255) not null unique,
-    password varchar(255) not null,
-    role_id bigserial references role(id)
+    password varchar(255) not null
 );
 
 create table room (

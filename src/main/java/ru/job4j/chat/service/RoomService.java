@@ -1,5 +1,6 @@
 package ru.job4j.chat.service;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.repository.RoomRepository;
@@ -9,12 +10,9 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class RoomService {
     private final RoomRepository rooms;
-
-    public RoomService(RoomRepository rooms) {
-        this.rooms = rooms;
-    }
 
     public List<Room> findAll() {
         List<Room> rsl = new ArrayList<>();

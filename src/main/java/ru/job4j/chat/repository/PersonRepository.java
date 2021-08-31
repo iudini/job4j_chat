@@ -7,8 +7,8 @@ import ru.job4j.chat.model.Person;
 import java.util.List;
 
 public interface PersonRepository extends CrudRepository<Person, Long> {
-    @EntityGraph(attributePaths = {"role"})
+    @EntityGraph(attributePaths = {"roles"})
     List<Person> findAll();
 
-    Person findByLogin(String login);
+    Person findByUsername(String username);
 }
