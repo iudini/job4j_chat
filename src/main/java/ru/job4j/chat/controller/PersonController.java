@@ -50,8 +50,8 @@ public class PersonController {
         if (person.getUsername() == null || person.getPassword() == null) {
             throw new NullPointerException("All fields must be filled");
         }
-        return new ResponseEntity<>(this.service.save(person),
-                HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(this.service.save(person));
     }
 
     @PutMapping("/update")
