@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import ru.job4j.chat.model.Person;
+import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.service.RoleService;
 
@@ -28,14 +28,19 @@ public class RoleController {
     public ResponseEntity<Role> findById(@PathVariable Long id) {
         var role = this.service.findById(id);
         return new ResponseEntity<>(
-                role.orElse(new Role()),
-                role.isPresent() ? HttpStatus.OK : HttpStatus.NOT_FOUND
+                role.orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                ),
+                HttpStatus.OK
         );
     }
 
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Role> create(@RequestBody Role role) {
+        if (role.getName() == null) {
+            throw new NullPointerException("All fields must be filled");
+        }
         return new ResponseEntity<>(
                 this.service.save(role),
                 HttpStatus.CREATED
@@ -45,6 +50,9 @@ public class RoleController {
     @PutMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
     public ResponseEntity<Void> update(@RequestBody Role role) {
+        if (role.getName() == null) {
+            throw new NullPointerException("All fields must be filled");
+        }
         this.service.save(role);
         return ResponseEntity.ok().build();
     }
