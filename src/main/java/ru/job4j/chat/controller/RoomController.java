@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.service.RoomService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -62,5 +63,16 @@ public class RoomController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.service.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Room> updateSomeFields(@RequestBody Room room) throws InvocationTargetException, IllegalAccessException {
+        return new ResponseEntity<>(
+                this.service.updateSomeFields(room).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                ),
+                HttpStatus.OK
+        );
     }
 }

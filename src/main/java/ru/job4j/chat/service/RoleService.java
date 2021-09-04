@@ -6,9 +6,12 @@ import org.springframework.stereotype.Service;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.repository.RoleRepository;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static ru.job4j.chat.service.Services.update;
 
 @Service
 @RequiredArgsConstructor
@@ -36,5 +39,9 @@ public class RoleService {
     public void delete(Long id) {
         log.info("Delete role with id {} from database", id);
         this.roles.deleteById(id);
+    }
+
+    public Optional<Role> updateSomeFields(Role role) throws InvocationTargetException, IllegalAccessException {
+        return update(roles, role);
     }
 }

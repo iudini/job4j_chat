@@ -9,9 +9,12 @@ import ru.job4j.chat.repository.MessageRepository;
 import ru.job4j.chat.repository.PersonRepository;
 import ru.job4j.chat.repository.RoomRepository;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static ru.job4j.chat.service.Services.update;
 
 @Service
 @RequiredArgsConstructor
@@ -40,5 +43,9 @@ public class MessageService {
 
     public void delete(Long id) {
         this.messages.deleteById(id);
+    }
+
+    public Optional<Message> updateSomeFields(Message message) throws InvocationTargetException, IllegalAccessException {
+        return update(messages, message);
     }
 }

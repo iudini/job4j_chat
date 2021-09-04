@@ -9,6 +9,7 @@ import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Message;
 import ru.job4j.chat.service.MessageService;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
 @RestController
@@ -62,5 +63,16 @@ public class MessageController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.service.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Message> updateSomeFields(@RequestBody Message message) throws InvocationTargetException, IllegalAccessException {
+        return new ResponseEntity<>(
+                this.service.updateSomeFields(message).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                ),
+                HttpStatus.OK
+        );
     }
 }

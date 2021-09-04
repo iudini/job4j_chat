@@ -5,9 +5,12 @@ import org.springframework.stereotype.Service;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.repository.RoomRepository;
 
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
+import static ru.job4j.chat.service.Services.update;
 
 @Service
 @RequiredArgsConstructor
@@ -30,5 +33,9 @@ public class RoomService {
 
     public void delete(Long id) {
         this.rooms.deleteById(id);
+    }
+
+    public Optional<Room> updateSomeFields(Room room) throws InvocationTargetException, IllegalAccessException {
+        return update(rooms, room);
     }
 }

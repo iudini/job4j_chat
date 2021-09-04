@@ -15,10 +15,10 @@ import ru.job4j.chat.model.Role;
 import ru.job4j.chat.repository.PersonRepository;
 import ru.job4j.chat.repository.RoleRepository;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.Optional;
+import java.lang.reflect.InvocationTargetException;
+import java.util.*;
+
+import static ru.job4j.chat.service.Services.update;
 
 @Service
 @Transactional
@@ -72,5 +72,9 @@ public class PersonService implements UserDetailsService {
     public void delete(Long id) {
         log.info("Delete user with id {} from database", id);
         this.persons.deleteById(id);
+    }
+
+    public Optional<Person> updateSomeFields(Person person) throws InvocationTargetException, IllegalAccessException {
+        return update(persons, person);
     }
 }

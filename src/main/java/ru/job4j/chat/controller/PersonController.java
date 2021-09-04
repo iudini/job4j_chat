@@ -13,6 +13,7 @@ import ru.job4j.chat.service.PersonService;
 
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
 import java.util.List;
 
@@ -69,6 +70,17 @@ public class PersonController {
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         this.service.delete(id);
         return ResponseEntity.ok().build();
+    }
+
+    @PatchMapping("/patch")
+    @PreAuthorize("hasAuthority('ROLE_USER')")
+    public ResponseEntity<Person> updateSomeFields(@RequestBody Person person) throws InvocationTargetException, IllegalAccessException {
+        return new ResponseEntity<>(
+                this.service.updateSomeFields(person).orElseThrow(() ->
+                        new ResponseStatusException(HttpStatus.NOT_FOUND)
+                ),
+                HttpStatus.OK
+        );
     }
 
     @ExceptionHandler({IllegalArgumentException.class})
