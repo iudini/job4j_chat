@@ -6,12 +6,15 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Person;
 import ru.job4j.chat.service.PersonService;
+import ru.job4j.chat.validation.Operation;
 
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.util.HashMap;
@@ -44,23 +47,15 @@ public class PersonController {
     }
 
     @PostMapping("/sign-up")
-    public ResponseEntity<Person> create(@RequestBody Person person) {
-        if (person.getPassword().length() < 8) {
-            throw new IllegalArgumentException("Password length must be at least 8 characters");
-        }
-        if (person.getUsername() == null || person.getPassword() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Person> create(@Valid @RequestBody Person person) {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(this.service.save(person));
     }
 
     @PutMapping("/update")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Void> update(@RequestBody Person person) {
-        if (person.getUsername() == null || person.getPassword() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    public ResponseEntity<Void> update(@Valid @RequestBody Person person) {
         this.service.save(person);
         return ResponseEntity.ok().build();
     }

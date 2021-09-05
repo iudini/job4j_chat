@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Room;
 import ru.job4j.chat.service.RoomService;
+import ru.job4j.chat.validation.Operation;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -38,10 +41,8 @@ public class RoomController {
 
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Room> create(@RequestBody Room room) {
-        if (room.getName() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Room> create(@Valid @RequestBody Room room) {
         return new ResponseEntity<>(
                 this.service.save(room),
                 HttpStatus.CREATED
@@ -50,10 +51,7 @@ public class RoomController {
 
     @PutMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Void> update(@RequestBody Room room) {
-        if (room.getName() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    public ResponseEntity<Void> update(@Valid @RequestBody Room room) {
         this.service.save(room);
         return ResponseEntity.ok().build();
     }

@@ -2,8 +2,12 @@ package ru.job4j.chat.model;
 
 import lombok.Getter;
 import lombok.Setter;
+import ru.job4j.chat.validation.Operation;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Objects;
@@ -15,8 +19,16 @@ import java.util.Objects;
 public class Person extends Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @NotNull(message = "Id must be non null",
+            groups = {Operation.OnUpdate.class, Operation.OnDelete.class})
     private Long id;
+
+    @NotBlank(message = "Username must be not empty")
+    @Size(min = 8, message = "Username must be at least 8 characters")
     private String username;
+
+    @NotBlank(message = "Password must be not empty")
+    @Size(min = 8, message = "Password must be at least 8 characters")
     private String password;
 
     @ManyToMany

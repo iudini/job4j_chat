@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Message;
 import ru.job4j.chat.service.MessageService;
+import ru.job4j.chat.validation.Operation;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -38,10 +41,8 @@ public class MessageController {
 
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Message> create(@RequestBody Message message) {
-        if (message.getContent() == null) {
-            throw new NullPointerException("Content can't be empty");
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Message> create(@Valid @RequestBody Message message) {
         return new ResponseEntity<>(
                 this.service.save(message),
                 HttpStatus.CREATED
@@ -50,10 +51,7 @@ public class MessageController {
 
     @PutMapping("/")
     @PreAuthorize("hasAuthority('ROLE_USER')")
-    public ResponseEntity<Void> update(@RequestBody Message message) {
-        if (message.getContent() == null) {
-            throw new NullPointerException("Content can't be empty");
-        }
+    public ResponseEntity<Void> update(@Valid @RequestBody Message message) {
         this.service.save(message);
         return ResponseEntity.ok().build();
     }

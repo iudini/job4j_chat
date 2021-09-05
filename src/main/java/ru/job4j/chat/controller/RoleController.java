@@ -4,11 +4,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import ru.job4j.chat.model.Role;
 import ru.job4j.chat.service.RoleService;
+import ru.job4j.chat.validation.Operation;
 
+import javax.validation.Valid;
 import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
@@ -38,10 +41,8 @@ public class RoleController {
 
     @PostMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Role> create(@RequestBody Role role) {
-        if (role.getName() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    @Validated(Operation.OnCreate.class)
+    public ResponseEntity<Role> create(@Valid @RequestBody Role role) {
         return new ResponseEntity<>(
                 this.service.save(role),
                 HttpStatus.CREATED
@@ -50,10 +51,7 @@ public class RoleController {
 
     @PutMapping("/")
     @PreAuthorize("hasAuthority('ROLE_ADMIN')")
-    public ResponseEntity<Void> update(@RequestBody Role role) {
-        if (role.getName() == null) {
-            throw new NullPointerException("All fields must be filled");
-        }
+    public ResponseEntity<Void> update(@Valid @RequestBody Role role) {
         this.service.save(role);
         return ResponseEntity.ok().build();
     }
