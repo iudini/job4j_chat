@@ -1,8 +1,8 @@
 [![Build Status](https://app.travis-ci.com/iudini/job4j_chat.svg?branch=main)](https://app.travis-ci.com/iudini/job4j_chat)
 
-#REST API Chat
+# REST API Chat
 
-###Технологии:
+### Технологии:
 
 - Spring Boot (Web, Data, Security)
 - REST API
@@ -10,7 +10,7 @@
 - PostgreSQL 
 - Maven
 
-###Сборка приложения
+### Сборка приложения
  - Для сборки приложения на вашем компьютере должны быть установлены:
     - JDK 14+
     - Maven
@@ -26,13 +26,13 @@
 
 Адреса /sign-up и /login доступны без аутентификации.
 
-###Регистрация:
+### Регистрация:
 ```
 POST http://localhost:8080/users/sign-up/
 Content-Type: application/json
 Request body: {"username":"username", "password":"password"}
 ```
-###Аутентификация:
+### Аутентификация:
 По умолчанию в системе зарегистрирован пользователь "admin:admin", роль "ROLE_ADMIN"
 ```
 POST http://localhost:8080/users/login/  
@@ -42,14 +42,14 @@ Request body: {"username":"username", "password":"password"}
 ```
 Response header: Authorization: Bearer ___jwtToken___
 ```
-###JWT авторизация:
+### JWT авторизация:
 Все остальные запросы должны быть авторизованы, для этого в ваши запросы необходимо добавить
 Header полученный после входа
 ```
 Request header: Authorization: Bearer ___jwtToken___
 ```
 
-###Запросы к "/users"
+### Запросы к "/users"
 Получить список всех пользователей, только ROLE_ADMIN
 ```
 GET http://localhost:8080/users/all/  
@@ -76,7 +76,7 @@ DELETE http://localhost:8080/users/delete/100
 Header: Authorization: Bearer ___jwtToken___
 ```
 
-###Запросы к "/role"
+### Запросы к "/role"
 только ROLE_ADMIN
 
 Получить список всех ролей
@@ -113,7 +113,7 @@ DELETE http://localhost:8080/role/100
 Header: Authorization: Bearer ___jwtToken___
 ```
 
-###Запросы к "/room"
+### Запросы к "/room"
 Получить список всех комнат
 ```
 GET http://localhost:8080/room/  
@@ -148,7 +148,7 @@ DELETE http://localhost:8080/room/100
 Header: Authorization: Bearer ___jwtToken___
 ```
 
-###Запросы к "/message"
+### Запросы к "/message"
 Получить список всех сообщений
 ```
 GET http://localhost:8080/message/  
